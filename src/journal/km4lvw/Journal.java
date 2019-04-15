@@ -7,6 +7,7 @@ package journal.km4lvw;
 
 import java.util.ArrayList;
 import java.sql.*;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 import org.sqlite.SQLiteConnection;
@@ -18,14 +19,14 @@ import org.sqlite.core.DB;
  */
 public class Journal 
 {
-    private String DATABASE_FILE = "test.db";
+    private static final String DATABASE_FILE = "jdbc:sqlite:test.db";
     Connection sqlCon = null;
     String createTable = "create table if not exists entries(entry_id INTEGER UNIQUE AUTOINCREMENT, entry_title TEXT, entry_content TEXT, data BLOB);";
     private void openJournalDatabase(String fileName) {
  
-        String url = "jdbc:sqlite:C:/sqlite/db/" + fileName;
+        String url = "jdbc:sqlite:" + fileName;
  
-        try (Connection c = DriverManager.getConnection("test.db")) {
+        try (Connection c = DriverManager.getConnection(fileName)) {
             if (c != null) {
                 sqlCon = c;
             }
@@ -35,31 +36,64 @@ public class Journal
 		  e.printStackTrace();
 		  System.exit(100);
         }
-    }
-    
-    private void sqlQuery(String query)
-    {
-	   if (sqlCon == null)
+	   try (Statement stmnt = sqlCon.createStatement())
 	   {
-		  openJournalDatabase()
+		  stmnt.execute(createTable);
+	   }
+	   catch(SQLException e)
+	   {
+		  System.out.println("Unable to create Table entries.");
+		  e.printStackTrace();
 	   }
     }
     
+    private ResultSet sqlQuery(String query)
+    {
+	   ResultSet ret = null;
+	   if (sqlCon == null)
+	   {
+		  openJournalDatabase(DATABASE_FILE);
+	   }
+	   try (Statement stmnt = sqlCon.createStatement())
+	   {
+		  ret = stmnt.executeQuery(query);
+	   }
+	   catch(SQLException e)
+	   {
+		  System.out.println("\nUnable to execute statement.");
+		  e.printStackTrace();
+	   }
+	   return ret;
+    }
+    
+    private void sqlReadEntriesFromDatabase()
+    {
+	   
+	   ResultSet sqlResult = sqlQuery("select * from * in entries");
+	   if (sqlResult != null)
+	   {
+		  // TODO: Add update of entrys.
+		  System.out.println("sqlResult was not null!!");
+	   }
+	   
+    }
     
     private ArrayList<Entry> entrys;	//All entries as part of this journal.
     private JournalDate creationDate;	//Journal Creation Date.
     private JournalDate lastUpdateDate;
-    Journal()
+    private static Journal journal = new Journal();
+    private Journal()
     {
 	   entrys = new ArrayList<>();
 	   creationDate = new JournalDate();
 	   lastUpdateDate = new JournalDate();
     }
     
-    Journal ReadEntries()
+    static Journal ReadEntries()
     {
-	  Journal j = new Journal();
-	  
+	   journal.sqlReadEntriesFromDatabase();
+	   //this.entrys.addAll(entries.);
+	   return journal;
     }
     
     void AddEntry(Entry entry)

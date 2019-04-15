@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 public class JournalGui extends Application {
     private Stage window;
-    private Journal journal = Journal.ReadEntries();
+    private final Journal journal = Journal.ReadEntries();
     
     @Override
     public void start(Stage mainWindow) {
