@@ -15,6 +15,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 /**
@@ -25,6 +28,7 @@ import javafx.stage.Stage;
 
 
 public class JournalGui extends Application {
+    private static final String titlePrompt = "Title";
     private Stage window;
     private final Journal journal = Journal.getInstance();
     
@@ -32,7 +36,7 @@ public class JournalGui extends Application {
     public void start(Stage mainWindow) {
 	   mainWindow.setTitle("Journal 0.0.0");
 	   GridPane gridPane = new GridPane();
-	   TextField titleField = new TextField("Title");
+	   TextField titleField = new TextField(titlePrompt);
 	   titleField.setPrefWidth(1000000);
 	   gridPane.add(titleField, 0,0,5,1);
 	   TextArea entryField = new TextArea();
@@ -46,8 +50,22 @@ public class JournalGui extends Application {
 		  public void handle(ActionEvent event) {
 			 String title = titleField.getText();
 			 String entry = entryField.getText();
-			 journal.addEntry(title, entry);
-                         journal.getEntries();
+                         if ( !entry.equals("") && !title.equals(""))
+                         {
+                             journal.addEntry(title, entry);
+                             journal.getEntries();
+                             titleField.clear();
+                             entryField.clear();
+                             titleField.promptTextProperty().set(titlePrompt);
+                         }
+                         else
+                         {
+                             Popup popup = new Popup();
+                             popup.setX(300);
+                             popup.setY(200);
+                             popup.getContent().addAll(new );
+                             popup.show(mainWindow);
+                         }
 		  }
 	   });
 	   gridPane.add(entrySubmit, 6, 0);
