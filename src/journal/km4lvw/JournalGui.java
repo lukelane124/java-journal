@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 public class JournalGui extends Application {
     private Stage window;
-    private final Journal journal = Journal.ReadEntries();
+    private final Journal journal = Journal.getInstance();
     
     @Override
     public void start(Stage mainWindow) {
@@ -46,7 +46,8 @@ public class JournalGui extends Application {
 		  public void handle(ActionEvent event) {
 			 String title = titleField.getText();
 			 String entry = entryField.getText();
-			 
+			 journal.addEntry(title, entry);
+                         journal.getEntries();
 		  }
 	   });
 	   gridPane.add(entrySubmit, 6, 0);
