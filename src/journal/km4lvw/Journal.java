@@ -19,17 +19,16 @@ import org.sqlite.core.DB;
  */
 public class Journal 
 {
-    private static final String DATABASE_FILE = "jdbc:sqlite:test.db";
+    private static final String DATABASE_FILE = "jdbc:sqlite:./test.db";
     Connection sqlCon = null;
     String createTable = "create table if not exists entries(entry_id INTEGER UNIQUE AUTOINCREMENT, entry_title TEXT, entry_content TEXT, data BLOB);";
     private void openJournalDatabase(String fileName) {
- 
+       
         String url = "jdbc:sqlite:" + fileName;
  
-        try (Connection c = DriverManager.getConnection(fileName)) {
-            if (c != null) {
-                sqlCon = c;
-            }
+        try
+        {
+            sqlCon = DriverManager.getConnection(fileName);
  
         } catch (SQLException e) {
             System.out.println("Unable to connect to test database.");
@@ -42,7 +41,7 @@ public class Journal
 	   }
 	   catch(SQLException e)
 	   {
-		  System.out.println("Unable to create Table entries.");
+		  System.out.println("Unable to create sql Table entries.");
 		  e.printStackTrace();
 	   }
     }
