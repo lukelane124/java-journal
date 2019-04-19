@@ -34,39 +34,29 @@ public class JournalGui extends Application {
     
     @Override
     public void start(Stage mainWindow) {
-	   mainWindow.setTitle("Journal 0.0.0");
-	   GridPane gridPane = new GridPane();
-	   TextField titleField = new TextField(titlePrompt);
-	   titleField.setPrefWidth(1000000);
-	   gridPane.add(titleField, 0,0,5,1);
-	   TextArea entryField = new TextArea();
-	   gridPane.add(entryField, 1, 5, 20, 20);
+            mainWindow.setTitle("Journal 0.0.0");
+            GridPane gridPane = new GridPane();
+            TextField titleField = new TextField(titlePrompt);
+            titleField.setPrefWidth(1000000);
+            gridPane.add(titleField, 0,0,5,1);
+            TextArea entryField = new TextArea();
+	    gridPane.add(entryField, 1, 5, 20, 20);
 	   
-	   Button entrySubmit = new Button();
-	   entrySubmit.setText("Complete Entry");
-	   entrySubmit.setOnAction(new EventHandler<ActionEvent>() {
+	    Button entrySubmit = new Button();
+	    entrySubmit.setText("Complete Entry");
+	    entrySubmit.setOnAction(new EventHandler<ActionEvent>() {
 		  
-		  @Override
-		  public void handle(ActionEvent event) {
-			 String title = titleField.getText();
-			 String entry = entryField.getText();
-                         if ( !entry.equals("") && !title.equals(""))
-                         {
-                             journal.addEntry(title, entry);
-                             journal.getEntries();
-                             titleField.clear();
-                             entryField.clear();
-                             titleField.promptTextProperty().set(titlePrompt);
-                         }
-                         else
-                         {
-                             Popup popup = new Popup();
-                             popup.setX(300);
-                             popup.setY(200);
-                             popup.getContent().addAll(new );
-                             popup.show(mainWindow);
-                         }
-		  }
+		@Override
+		public void handle(ActionEvent event) 
+                {
+                    String title = titleField.getText();
+                    String entry = entryField.getText();
+                    journal.addEntry(title, entry);
+                    journal.getEntries();
+                    titleField.clear();
+                    entryField.clear();
+                    titleField.promptTextProperty().set(titlePrompt);
+		}
 	   });
 	   gridPane.add(entrySubmit, 6, 0);
 	   StackPane root = new StackPane();
