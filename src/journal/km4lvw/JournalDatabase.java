@@ -21,9 +21,9 @@ public class JournalDatabase extends Database
     private JournalDatabase()
     {
         super(DATABASE_FILE);
-        String createTableSQL = "create table if not exists entries(\n" + 
-                "id integer primary key, entry_creation_date TEXT not null, \n" + 
-                "entry_last_update_date text not null, entry_title TEXT, \n" +
+        String createTableSQL = "CREATE TABLE IF NOT EXISTS entries(\n" + 
+                "id INTEGER PRIMARY KEY, entry_creation_date TEXT NOT NULL, \n" + 
+                "entry_last_update_date TEXT NOT NULL, entry_title TEXT, \n" +
                 "entry_content TEXT, entry_data BLOB);";
         executeSql(createTableSQL);
     }
@@ -38,9 +38,9 @@ public class JournalDatabase extends Database
     
     public void addEntry(String title, String entry)
     {
-        String sqlString = "insert into entries(entry_title, entry_content," +
+        String sqlString = "INSERT INTO entries(entry_title, entry_content," +
                 "entry_creation_date, entry_last_update_date) " +
-                "values(?,?,?,?);";
+                "VALUES(?,?,?,?);";
         try (PreparedStatement pstmnt = sqlConnection.prepareStatement(sqlString))
         {
             pstmnt.setString(1, title);
