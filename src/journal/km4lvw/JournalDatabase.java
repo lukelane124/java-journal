@@ -16,7 +16,7 @@ import java.util.Date;
  */
 public class JournalDatabase extends Database 
 {
-    private static final String DATABASE_FILE = "test3.db";
+    private static final String DATABASE_FILE = "jrnl.sqlite";
     protected static JournalDatabase localInstance;
     private JournalDatabase()
     {

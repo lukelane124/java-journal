@@ -29,8 +29,6 @@ import javafx.stage.StageStyle;
  * @author Lucas
  */
 
-
-
 public class JournalGui extends Application {
     private static final String titlePrompt = "Title";
     private final Journal journal = Journal.getInstance();
@@ -92,12 +90,8 @@ public class JournalGui extends Application {
        mainStage.setScene(MainJournalScene);
        mainStage.show();
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-	   launch(args);
-    }
+    
+
     
     private void getResult(String prompt, String ... buttonString)
     {
@@ -122,4 +116,10 @@ public class JournalGui extends Application {
         window.showAndWait();
     }
     
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+       launch(args);
+    }
 }
