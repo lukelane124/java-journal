@@ -20,8 +20,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
-import SimpleGuiTools.SPopUp;
+import javafx.event.Event;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -34,13 +35,13 @@ public class JournalGui extends Application {
     private static final String titlePrompt = "Title";
     private final Journal journal = Journal.getInstance();
     private Scene MainJournalScene, PopupScene;
-    private FlowPane popupPane;
     private Stage mainStage;
+    
+    private String passingString;
     
     @Override
     public void start(Stage mainWindow) {
         mainStage = mainWindow;
-        popupPane = new FlowPane();
         displayJournalEntryScene();
         
     }
@@ -64,19 +65,19 @@ public class JournalGui extends Application {
             public void handle(ActionEvent event) 
             {
                 String title = titleField.getText();
-                     String entry = entryField.getText();
-                     if ( !entry.equals("") && !title.equals(""))
-                     {
-                         journal.addEntry(title, entry);
-                         journal.getEntries();
-                         titleField.clear();
-                         entryField.clear();
-                         titleField.promptTextProperty().set(titlePrompt);
-                     }
-                     else
-                     {
-
-                     }
+                String entry = entryField.getText();
+                if ( !entry.equals("") && !title.equals(""))
+                {
+                    journal.addEntry(title, entry);
+                    journal.getEntries();
+                    titleField.clear();
+                    entryField.clear();
+                    titleField.promptTextProperty().set(titlePrompt);
+                }
+                else
+                {
+                    getResult("Please enter a non-empty title and entry", "Okay");
+                }
             }
        });
        gridPane.add(entrySubmit, 6, 0);
@@ -96,6 +97,29 @@ public class JournalGui extends Application {
      */
     public static void main(String[] args) {
 	   launch(args);
+    }
+    
+    private void getResult(String prompt, String ... buttonString)
+    {
+        Stage window = new Stage(StageStyle.UTILITY);
+        GridPane popRoot = new GridPane();
+        Scene popScene = new Scene(popRoot);        
+        popRoot.add(new Label(prompt), 0, 0);
+        int buttonOffset = 0;
+        for (String s : buttonString)
+        {
+            Button b = new Button(s);
+            b.setOnMouseClicked(new EventHandler() {
+                @Override
+                public void handle(Event t) {
+                    passingString = b.getText();
+                    window.close();
+                }
+            });
+            popRoot.add(b, buttonOffset++, 1);
+        }
+        window.setScene(popScene);
+        window.showAndWait();
     }
     
 }
