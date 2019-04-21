@@ -10,8 +10,6 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
-import org.sqlite.SQLiteConnection;
-import org.sqlite.core.DB;
 import Database.Database;
 import java.util.logging.Level;
 import java.util.logging.Logger;
