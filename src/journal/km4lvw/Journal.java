@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 import Database.Database;
+import java.util.AbstractList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,5 +63,11 @@ public class Journal
             ex.printStackTrace();
         }
         
+    }
+
+    AbstractList<String> getTitles() {
+	   AbstractList<String> ret = new ArrayList<>();
+	   ResultSet rs = db.getTitles();
+	   return ret;
     }
 }

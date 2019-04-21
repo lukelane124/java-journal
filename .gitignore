@@ -2,4 +2,4 @@ dist/
 build/
 *.sqlite
 /nbproject/private/
-.SD_Store
+.DS_Store

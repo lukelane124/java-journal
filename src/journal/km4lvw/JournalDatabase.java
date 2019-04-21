@@ -6,10 +6,13 @@
 package journal.km4lvw;
 import Database.Database;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Tommy Lane <km4lvw@km4lvw.com>
@@ -56,5 +59,23 @@ public class JournalDatabase extends Database
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    ResultSet getTitles() {
+	   ResultSet ret = null;
+	   
+	   try (PreparedStatement stmnt = sqlConnection.prepareStatement("SELECT ? FROM ?")) {
+		  stmnt.setString(1, "*");
+		  stmnt.setString(2, "entries");
+		  ret = stmnt.executeQuery();
+		  
+	   } catch (SQLException ex) {
+		  System.out.println("Unable to get entries from the entry database.");
+		  System.out.println(ex.getMessage());
+		  ex.printStackTrace();
+	   }
+	   
+	   
+	   return (sqlQueryWResults("SELECT * FROM entries"));
     }
 }
