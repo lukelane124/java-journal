@@ -56,6 +56,7 @@ public class Database {
 
 	   try (Statement stmnt = sqlConnection.createStatement()) {
 		  stmnt.execute(sqlString);
+                  stmnt.close();
 	   } catch (SQLException e) {
 		  System.out.println("Unable to create table");
 		  System.out.println(e.getMessage());

@@ -68,6 +68,23 @@ public class Journal
     AbstractList<String> getTitles() {
 	   AbstractList<String> ret = new ArrayList<>();
 	   ResultSet rs = db.getTitles();
+           try
+           {
+               while(rs.next())
+               {
+                   ret.add(rs.getString("entry_title"));
+               }
+           }
+           catch (SQLException e)
+           {
+               System.out.println("unable to call rs.next\n" + e.getMessage());
+               e.printStackTrace();
+           }
+           String[] titles = {"t1", "t2","asdfdkskldkfkdjasldk","t4"};
+           for (int i = 0; i < titles.length; i++)
+           {
+               ret.add(titles[i]);
+           }
 	   return ret;
     }
 }

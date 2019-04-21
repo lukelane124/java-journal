@@ -51,6 +51,7 @@ public class JournalDatabase extends Database
             pstmnt.setString(3, (new SimpleDateFormat("dd-mm-yyyy-H:m:s:S").format(new Date())));
             pstmnt.setString(4, (new SimpleDateFormat("dd-mm-yyyy-H:m:s:S").format(new Date())));
             pstmnt.execute();
+            pstmnt.close();
             System.out.println("the entry was added successfully to the database.");
         }
         catch (SQLException e)
@@ -64,18 +65,22 @@ public class JournalDatabase extends Database
     ResultSet getTitles() {
 	   ResultSet ret = null;
 	   
-	   try (PreparedStatement stmnt = sqlConnection.prepareStatement("SELECT ? FROM ?")) {
-		  stmnt.setString(1, "*");
-		  stmnt.setString(2, "entries");
-		  ret = stmnt.executeQuery();
-		  
-	   } catch (SQLException ex) {
+	   try  
+           {
+                Statement test = sqlConnection.createStatement();
+                PreparedStatement stmnt = sqlConnection.prepareStatement("SELECT * FROM entries;");
+                ret = test.executeQuery("SELECT * FROM entries;");
+		//ret = stmnt.executeQuery();
+		stmnt.close();
+	   } 
+           catch (SQLException ex) 
+           {
 		  System.out.println("Unable to get entries from the entry database.");
 		  System.out.println(ex.getMessage());
 		  ex.printStackTrace();
 	   }
 	   
 	   
-	   return (sqlQueryWResults("SELECT * FROM entries"));
+	   return (ret);
     }
 }

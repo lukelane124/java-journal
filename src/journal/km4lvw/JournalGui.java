@@ -132,12 +132,18 @@ public class JournalGui extends Application {
     
     void showEntries()
     {
-	   Stage entriesWindow = new Stage(StageStyle.UTILITY);
+        Stage entriesWindow = new Stage(StageStyle.UTILITY);
         GridPane entriesRoot = new GridPane();
         Scene entriesScene = new Scene(entriesRoot); 
-	   TableView tableView = new TableView();
-	   ObservableList<String> list = FXCollections.observableArrayList();
-	   AbstractList<String> titles = journal.getTitles();
+        TableView tableView = new TableView();
+        ObservableList<String> list = FXCollections.observableArrayList();
+        AbstractList<String> titles = journal.getTitles();
+        String [] colName = {"Title", "Entry", "Last Modification Data"};
+        tableView.getColumns().add(colName);
+        for (String s : titles)
+        {
+            //tableView.setR
+        }
     }
     
     /**
