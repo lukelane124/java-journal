@@ -5,7 +5,11 @@
  */
 package journal.km4lvw;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -21,6 +25,9 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.event.Event;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.StageStyle;
 
@@ -68,7 +75,7 @@ public class JournalGui extends Application {
                 if ( !entry.equals("") && !title.equals(""))
                 {
                     journal.addEntry(title, entry);
-                    journal.getEntries();
+                    
                     titleField.clear();
                     entryField.clear();
                     titleField.promptTextProperty().set(titlePrompt);
@@ -80,6 +87,15 @@ public class JournalGui extends Application {
             }
        });
        gridPane.add(entrySubmit, 6, 0);
+	  Button listEntries = new Button("List Entries");
+	  listEntries.setOnAction(new EventHandler<ActionEvent>() {
+		  @Override
+		  public void handle(ActionEvent event) {
+			 showEntries();
+		  }
+	   });
+	  gridPane.add(listEntries, 7, 0);
+
        StackPane root = new StackPane();
        //root.getChildren().add(entrySubmit);
        root.getChildren().add(gridPane);
@@ -115,6 +131,26 @@ public class JournalGui extends Application {
         }
         window.setScene(popScene);
         window.showAndWait();
+    }
+    
+    void showEntries()
+    {
+        Stage entriesWindow = new Stage(StageStyle.UTILITY);
+        GridPane entriesRoot = new GridPane();
+        Scene entriesScene = new Scene(entriesRoot); 
+        ListView listview = new ListView();
+        ObservableList<String> list = FXCollections.observableArrayList();
+        AbstractList<String> titles = journal.getTitles();
+        String [] colName = {"Title"};
+        for (String s : titles)
+        {
+            listview.getItems().add(s);
+        }
+        Label l = new Label("Titles");
+        entriesRoot.add(l, 0,0);
+        entriesRoot.add(listview, 0,1);
+        entriesWindow.setScene(entriesScene);
+        entriesWindow.showAndWait();
     }
     
     /**

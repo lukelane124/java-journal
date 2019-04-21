@@ -2,3 +2,5 @@ dist/
 build/
 *.sqlite
 private.xml
+/nbproject/private/
+.DS_Store
