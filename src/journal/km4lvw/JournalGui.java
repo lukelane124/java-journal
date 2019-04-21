@@ -40,6 +40,7 @@ public class JournalGui extends Application {
     @Override
     public void start(Stage mainWindow) {
         mainStage = mainWindow;
+        mainStage.setWidth(800.0);
         displayJournalEntryScene();
         
     }
