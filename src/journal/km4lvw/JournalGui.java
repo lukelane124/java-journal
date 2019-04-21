@@ -25,6 +25,8 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.event.Event;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.StageStyle;
@@ -135,15 +137,19 @@ public class JournalGui extends Application {
         Stage entriesWindow = new Stage(StageStyle.UTILITY);
         GridPane entriesRoot = new GridPane();
         Scene entriesScene = new Scene(entriesRoot); 
-        TableView tableView = new TableView();
+        ListView listview = new ListView();
         ObservableList<String> list = FXCollections.observableArrayList();
         AbstractList<String> titles = journal.getTitles();
-        String [] colName = {"Title", "Entry", "Last Modification Data"};
-        tableView.getColumns().add(colName);
+        String [] colName = {"Title"};
         for (String s : titles)
         {
-            //tableView.setR
+            listview.getItems().add(s);
         }
+        Label l = new Label("Titles");
+        entriesRoot.add(l, 0,0);
+        entriesRoot.add(listview, 0,1);
+        entriesWindow.setScene(entriesScene);
+        entriesWindow.showAndWait();
     }
     
     /**
