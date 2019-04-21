@@ -1,3 +1,5 @@
 dist/
 build/
 *.sqlite
+/nbproject/private/
+.SD_Store
