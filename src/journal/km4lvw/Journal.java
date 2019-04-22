@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 import Database.Database;
+import java.util.AbstractList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,5 +63,28 @@ public class Journal
             ex.printStackTrace();
         }
         
+    }
+
+    AbstractList<String> getTitles() {
+	   AbstractList<String> ret = new ArrayList<>();
+	   ResultSet rs = db.getTitles();
+           try
+           {
+               while(rs.next())
+               {
+                   ret.add(rs.getString("entry_title"));
+               }
+           }
+           catch (SQLException e)
+           {
+               System.out.println("unable to call rs.next\n" + e.getMessage());
+               e.printStackTrace();
+           }
+           String[] titles = {"t1", "t2","asdfdkskldkfkdjasldk","t4"};
+           for (int i = 0; i < titles.length; i++)
+           {
+               ret.add(titles[i]);
+           }
+	   return ret;
     }
 }

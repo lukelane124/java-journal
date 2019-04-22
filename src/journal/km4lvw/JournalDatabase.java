@@ -6,10 +6,13 @@
 package journal.km4lvw;
 import Database.Database;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Tommy Lane <km4lvw@km4lvw.com>
@@ -48,6 +51,7 @@ public class JournalDatabase extends Database
             pstmnt.setString(3, (new SimpleDateFormat("dd-mm-yyyy-H:m:s:S").format(new Date())));
             pstmnt.setString(4, (new SimpleDateFormat("dd-mm-yyyy-H:m:s:S").format(new Date())));
             pstmnt.execute();
+            pstmnt.close();
             System.out.println("the entry was added successfully to the database.");
         }
         catch (SQLException e)
@@ -56,5 +60,27 @@ public class JournalDatabase extends Database
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    ResultSet getTitles() {
+	   ResultSet ret = null;
+	   
+	   try  
+           {
+                Statement test = sqlConnection.createStatement();
+                PreparedStatement stmnt = sqlConnection.prepareStatement("SELECT * FROM entries;");
+                ret = test.executeQuery("SELECT * FROM entries;");
+		//ret = stmnt.executeQuery();
+		stmnt.close();
+	   } 
+           catch (SQLException ex) 
+           {
+		  System.out.println("Unable to get entries from the entry database.");
+		  System.out.println(ex.getMessage());
+		  ex.printStackTrace();
+	   }
+	   
+	   
+	   return (ret);
     }
 }
