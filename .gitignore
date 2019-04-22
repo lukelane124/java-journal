@@ -1,3 +1,6 @@
+.gitignore
+nbproject/private/private.xml
+nbproject/project.properties
 dist/
 build/
 *.sqlite
