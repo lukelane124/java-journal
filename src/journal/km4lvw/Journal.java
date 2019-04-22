@@ -48,6 +48,11 @@ public class Journal
         db.addEntry(title, entry);
     }
     
+    void getEntry(int id)
+    {
+        db.getEntry(id);
+    }
+    
     void getEntries()
     {
         ResultSet rs = db.sqlQueryWResults("select * from entries");
