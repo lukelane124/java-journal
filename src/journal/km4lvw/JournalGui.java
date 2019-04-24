@@ -25,10 +25,15 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.event.Event;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 
 /**
@@ -113,13 +118,18 @@ public class JournalGui extends Application {
     private void getResult(String prompt, String ... buttonString)
     {
         Stage window = new Stage(StageStyle.UTILITY);
-        GridPane popRoot = new GridPane();
-        Scene popScene = new Scene(popRoot);        
-        popRoot.add(new Label(prompt), 0, 0);
-        int buttonOffset = 0;
+        window.setTitle("Invalid Input");
+        
+        VBox popRoot = new VBox();
+        
+        Label promptLabel = new Label(prompt);
+        promptLabel.setAlignment(Pos.CENTER);
+        
+        popRoot.getChildren().add(promptLabel);
         for (String s : buttonString)
         {
             Button b = new Button(s);
+            b.setAlignment(Pos.CENTER);
             b.setOnMouseClicked(new EventHandler() {
                 @Override
                 public void handle(Event t) {
@@ -127,8 +137,18 @@ public class JournalGui extends Application {
                     window.close();
                 }
             });
-            popRoot.add(b, buttonOffset++, 1);
+            popRoot.getChildren().add(b);
+            popRoot.setAlignment(Pos.CENTER);
         }
+        
+        StackPane container = new StackPane();
+        container.getChildren().add(new Group(popRoot));
+        
+        BorderPane bp = new BorderPane();
+        bp.setCenter(container);
+        
+        Scene popScene = new Scene(bp, 250, 100);
+        
         window.setScene(popScene);
         window.showAndWait();
     }
