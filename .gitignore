@@ -4,3 +4,5 @@ build/
 private.xml
 /nbproject/private/
 .DS_Store
+private.properties
+project.properties
