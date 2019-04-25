@@ -129,7 +129,7 @@ public class JournalGui extends Application {
         for (String s : buttonString)
         {
             Button b = new Button(s);
-            b.setAlignment(Pos.CENTER);
+            b.setAlignment(Pos.BOTTOM_CENTER);
             b.setOnMouseClicked(new EventHandler() {
                 @Override
                 public void handle(Event t) {
@@ -139,6 +139,7 @@ public class JournalGui extends Application {
             });
             popRoot.getChildren().add(b);
             popRoot.setAlignment(Pos.CENTER);
+		  VBox.setMargin(b, new Insets(15,5,15,5));
         }
         
         StackPane container = new StackPane();
