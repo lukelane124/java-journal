@@ -85,11 +85,7 @@ public class Journal
                System.out.println("unable to call rs.next\n" + e.getMessage());
                e.printStackTrace();
            }
-           String[] titles = {"t1", "t2","asdfdkskldkfkdjasldk","t4"};
-           for (int i = 0; i < titles.length; i++)
-           {
-               ret.add(titles[i]);
-           }
+          
 	   return ret;
     }
 }
