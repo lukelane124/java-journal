@@ -61,6 +61,41 @@ public class JournalDatabase extends Database
             e.printStackTrace();
         }
     }
+    
+    public void getEntry(int id)
+    {
+        ResultSet result = null;
+        PreparedStatement pstmnt = null;
+        String sqlString = "SELECT * " + 
+                            "FROM entries " + 
+                            "WHERE id=" + id;
+        
+        try
+        {
+            pstmnt = sqlConnection.prepareStatement(sqlString);
+            
+            result = pstmnt.executeQuery();
+            
+            while(result.next())
+            {
+                System.out.println("Retrieved: " + result.getString("entry_title") + "\n" + 
+                                    result.getString("entry_content"));
+            }
+            
+            pstmnt.close();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Unable to get Entry");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally{
+            try{
+                if(result != null) result.close();
+                if(pstmnt != null) pstmnt.close();
+            } catch(Exception ex){}
+        }
+    }
 
     ResultSet getTitles() {
 	   ResultSet ret = null;

@@ -5,6 +5,7 @@
  */
 package journal.km4lvw;
 
+import java.awt.event.MouseAdapter;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import javafx.application.Application;
@@ -31,6 +32,7 @@ import javafx.scene.Group;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -158,8 +160,19 @@ public class JournalGui extends Application {
     {
         Stage entriesWindow = new Stage(StageStyle.UTILITY);
         GridPane entriesRoot = new GridPane();
-        Scene entriesScene = new Scene(entriesRoot); 
+        Scene entriesScene = new Scene(entriesRoot);
+        
         ListView listview = new ListView();
+        listview.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.getClickCount() == 2) {
+                    // need a method to show specified entry
+                    journal.getEntry(listview.getSelectionModel().getSelectedIndex() + 1);
+                }
+            }
+        });
+        
         ObservableList<String> list = FXCollections.observableArrayList();
         AbstractList<String> titles = journal.getTitles();
         String [] colName = {"Title"};
@@ -172,6 +185,10 @@ public class JournalGui extends Application {
         entriesRoot.add(listview, 0,1);
         entriesWindow.setScene(entriesScene);
         entriesWindow.showAndWait();
+    }
+    
+    void displayChosenJournalEntry(int id) {
+        
     }
     
     /**
