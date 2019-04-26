@@ -1,0 +1,2 @@
+PRAGMA schema.user_version;
+PRAGMA schema.user_version = INTEGER;
