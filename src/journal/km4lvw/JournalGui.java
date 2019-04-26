@@ -5,6 +5,7 @@
  */
 package journal.km4lvw;
 
+import java.awt.event.MouseAdapter;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import javafx.application.Application;
@@ -25,10 +26,16 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.event.Event;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 
 /**
@@ -113,13 +120,18 @@ public class JournalGui extends Application {
     private void getResult(String prompt, String ... buttonString)
     {
         Stage window = new Stage(StageStyle.UTILITY);
-        GridPane popRoot = new GridPane();
-        Scene popScene = new Scene(popRoot);        
-        popRoot.add(new Label(prompt), 0, 0);
-        int buttonOffset = 0;
+        window.setTitle("Invalid Input");
+        
+        VBox popRoot = new VBox();
+        
+        Label promptLabel = new Label(prompt);
+        promptLabel.setAlignment(Pos.CENTER);
+        
+        popRoot.getChildren().add(promptLabel);
         for (String s : buttonString)
         {
             Button b = new Button(s);
+            b.setAlignment(Pos.BOTTOM_CENTER);
             b.setOnMouseClicked(new EventHandler() {
                 @Override
                 public void handle(Event t) {
@@ -127,8 +139,19 @@ public class JournalGui extends Application {
                     window.close();
                 }
             });
-            popRoot.add(b, buttonOffset++, 1);
+            popRoot.getChildren().add(b);
+            popRoot.setAlignment(Pos.CENTER);
+		  VBox.setMargin(b, new Insets(15,5,15,5));
         }
+        
+        StackPane container = new StackPane();
+        container.getChildren().add(new Group(popRoot));
+        
+        BorderPane bp = new BorderPane();
+        bp.setCenter(container);
+        
+        Scene popScene = new Scene(bp, 250, 100);
+        
         window.setScene(popScene);
         window.showAndWait();
     }
@@ -137,8 +160,19 @@ public class JournalGui extends Application {
     {
         Stage entriesWindow = new Stage(StageStyle.UTILITY);
         GridPane entriesRoot = new GridPane();
-        Scene entriesScene = new Scene(entriesRoot); 
+        Scene entriesScene = new Scene(entriesRoot);
+        
         ListView listview = new ListView();
+        listview.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.getClickCount() == 2) {
+                    // need a method to show specified entry
+                    journal.getEntry(listview.getSelectionModel().getSelectedIndex() + 1);
+                }
+            }
+        });
+        
         ObservableList<String> list = FXCollections.observableArrayList();
         AbstractList<String> titles = journal.getTitles();
         String [] colName = {"Title"};
@@ -151,6 +185,10 @@ public class JournalGui extends Application {
         entriesRoot.add(listview, 0,1);
         entriesWindow.setScene(entriesScene);
         entriesWindow.showAndWait();
+    }
+    
+    void displayChosenJournalEntry(int id) {
+        
     }
     
     /**

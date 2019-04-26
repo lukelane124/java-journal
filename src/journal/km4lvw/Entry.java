@@ -66,9 +66,7 @@ public class Entry
     
     
     
-    public
-				
-		  Entry(String entryName, String entryContent)
+    public Entry(String entryName, String entryContent)
 		  {
 			 title = entryName;
 			 entry = new ArrayList<>();

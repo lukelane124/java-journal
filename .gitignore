@@ -1,6 +1,11 @@
+.gitignore
+nbproject/private/private.xml
+nbproject/project.properties
 dist/
 build/
 *.sqlite
 private.xml
 /nbproject/private/
 .DS_Store
+private.properties
+project.properties
