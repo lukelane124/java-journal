@@ -50,7 +50,7 @@ public class Journal
     
     void getEntry(int id)
     {
-        db.getEntry(id);
+        db.displayEntry(id);
     }
     
     void getEntries()
