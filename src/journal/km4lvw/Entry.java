@@ -30,6 +30,7 @@ class EntryEnums {
 	   NOVEMBER,
 	   DECEMBER,
     }
+    
     enum DayOfWeek
     {
 	   MONDAY,
@@ -43,51 +44,71 @@ class EntryEnums {
 }
 
 class JournalDate
+{
+    EntryEnums.Month month;
+    EntryEnums.DayOfWeek dow;
+    int hour;//Military UTC
+    int minute;
+    int second;
+    JournalDate()
     {
-	   EntryEnums.Month month;
-	   EntryEnums.DayOfWeek dow;
-	   int hour;//Military UTC
-	   int minute;
-	   int second; 
-	   JournalDate()
-	   {
-		  Calendar date = Calendar.getInstance();
-		  hour = date.get(Calendar.HOUR_OF_DAY);
-		  minute = date.get(Calendar.MINUTE);
-		  second = date.get(Calendar.SECOND);
-	   }
+        Calendar date = Calendar.getInstance();
+        hour = date.get(Calendar.HOUR_OF_DAY);
+        minute = date.get(Calendar.MINUTE);
+        second = date.get(Calendar.SECOND);
     }
+}
 
 public class Entry 
 {
-    private String title;
-    private ArrayList<String> entry;
-    private JournalDate jdate;
+    private int id;
+    private String entryCreationDate;
+    private String lastEntryUpdateDate;
+    private String entryTitle;
+    private String entryContent;
+
+    public Entry(int id, String entryCreationDate, String lastEntryUpdateDate, String entryTitle, String entryContent)
+    {
+        this.id = id;
+        this.entryCreationDate = entryCreationDate;
+        this.lastEntryUpdateDate = lastEntryUpdateDate;
+        this.entryTitle = entryTitle;
+        this.entryContent = entryContent;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public String getEntryCreationDate()
+    {
+        return entryCreationDate;
+    }
+
+    public String getLastEntryUpdateDate()
+    {
+        return lastEntryUpdateDate;
+    }
+
+    public String getEntryTitle()
+    {
+        return entryTitle;
+    }
+
+    public String getEntryContent()
+    {
+        return entryContent;
+    }
     
-    
-    
-    public Entry(String entryName, String entryContent)
-		  {
-			 title = entryName;
-			 entry = new ArrayList<>();
-			 entry.add(entryContent);
-			 jdate = new JournalDate();			 
-		  }
-		  
-		  String getTitle()
-		  {
-			 return this.title;
-		  }
-		  
-		  String[] getEntries()
-		  {
-			 return (String[])this.entry.toArray();
-		  }
-		  
-		  void updateEntry(String updatedEntry)
-		  {
-			 this.entry.add(updatedEntry);
-		  }
-		  
-		  
+    @Override
+    public String toString()
+    {
+        return "Entry: " + 
+                id + " | " +
+                entryTitle + " | " +
+                entryContent + " | " +
+                entryCreationDate + " | " +
+                lastEntryUpdateDate;
+    }
 }

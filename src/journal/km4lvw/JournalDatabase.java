@@ -62,7 +62,7 @@ public class JournalDatabase extends Database
         }
     }
     
-    public void getEntry(int id)
+    public Entry getEntry(int id)
     {
         ResultSet result = null;
         PreparedStatement pstmnt = null;
@@ -76,25 +76,21 @@ public class JournalDatabase extends Database
             
             result = pstmnt.executeQuery();
             
-            while(result.next())
-            {
-                System.out.println("Retrieved: " + result.getString("entry_title") + "\n" + 
-                                    result.getString("entry_content"));
-            }
-            
-            pstmnt.close();
+            return new Entry(result.getInt("id"), result.getString("entry_creation_date"), result.getString("entry_last_update_date"), result.getString("entry_title"), result.getString("entry_content"));
         }
         catch (SQLException e)
         {
             System.out.println("Unable to get Entry");
             System.out.println(e.getMessage());
-            e.printStackTrace();
         } finally{
             try{
-                if(result != null) result.close();
                 if(pstmnt != null) pstmnt.close();
+                if(result != null) result.close();
+                
             } catch(Exception ex){}
         }
+        
+        return null;
     }
 
     ResultSet getTitles() {
