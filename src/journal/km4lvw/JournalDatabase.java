@@ -62,7 +62,7 @@ public class JournalDatabase extends Database
         }
     }
     
-    public void getEntry(int id)
+    public void displayEntry(int id)
     {
         ResultSet result = null;
         PreparedStatement pstmnt = null;
