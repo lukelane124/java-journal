@@ -103,7 +103,7 @@ public class JournalGui extends Application {
                 String entry = entryField.getText();
                 if ( !entry.equals("") && !title.equals(""))
                 {
-                    if(entry == null)
+                    if(entry != null)
                     {
                         journal.addEntry(title, entry);
                     }
