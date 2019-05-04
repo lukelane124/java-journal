@@ -48,9 +48,9 @@ public class Journal
         db.addEntry(title, entry);
     }
     
-    void getEntry(int id)
+    Entry getEntry(int id)
     {
-        db.displayEntry(id);
+        return db.getEntry(id);
     }
     
     void getEntries()

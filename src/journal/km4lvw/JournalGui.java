@@ -9,6 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -37,6 +39,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 /**
  *
@@ -55,19 +58,38 @@ public class JournalGui extends Application {
     public void start(Stage mainWindow) {
         mainStage = mainWindow;
         mainStage.setWidth(800.0);
+        mainStage.setHeight(400.0);
+            
         displayJournalEntryScene();
-        
     }
-
     
     void displayJournalEntryScene()
     {
+        displayJournalEntry(null);
+    }
+
+    
+    void displayJournalEntry(Entry chosenEntry)
+    {
         mainStage.setTitle("Journal 0.0.0");
         GridPane gridPane = new GridPane();
-        TextField titleField = new TextField(titlePrompt);
+        TextField titleField;
+        if(chosenEntry == null)
+        {
+            titleField = new TextField(titlePrompt);
+        }
+        else
+        {
+            titleField = new TextField(chosenEntry.getEntryTitle());
+        }
+        
         titleField.setPrefWidth(1000000);
         gridPane.add(titleField, 0,0,5,1);
         TextArea entryField = new TextArea();
+        if(chosenEntry != null) 
+        {
+            entryField.setText(chosenEntry.getEntryContent());
+        }
         gridPane.add(entryField, 1, 5, 20, 20);
 
         Button entrySubmit = new Button();
@@ -81,7 +103,14 @@ public class JournalGui extends Application {
                 String entry = entryField.getText();
                 if ( !entry.equals("") && !title.equals(""))
                 {
-                    journal.addEntry(title, entry);
+                    if(entry != null)
+                    {
+                        journal.addEntry(title, entry);
+                    }
+                    else
+                    {
+                        
+                    }
                     
                     titleField.clear();
                     entryField.clear();
@@ -98,7 +127,7 @@ public class JournalGui extends Application {
 	  listEntries.setOnAction(new EventHandler<ActionEvent>() {
 		  @Override
 		  public void handle(ActionEvent event) {
-			 showEntries();
+			showEntries();
 		  }
 	   });
 	  gridPane.add(listEntries, 7, 0);
@@ -108,14 +137,36 @@ public class JournalGui extends Application {
        root.getChildren().add(gridPane);
        //root.getChildren().add(titleField);
 
-       MainJournalScene = new Scene(root, 300, 250);
+       MainJournalScene = new Scene(root, mainStage.getWidth(), mainStage.getHeight());
 
        //primaryStage.setTitle("Hello World!");
        mainStage.setScene(MainJournalScene);
+            mainStage.setResizable(true);
+
+            mainStage.widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                    setCurrentWidthToStage(number2); 
+                }
+            });
+
+            mainStage.heightProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                    setCurrentHeightToStage(number2);
+                }
+            });
+            
        mainStage.show();
     }
     
+    private void setCurrentWidthToStage(Number number2) {
+        mainStage.setWidth((double) number2);
+    }
 
+    private void setCurrentHeightToStage(Number number2) {
+        mainStage.setHeight((double) number2);
+    }
     
     private void getResult(String prompt, String ... buttonString)
     {
@@ -131,7 +182,7 @@ public class JournalGui extends Application {
         for (String s : buttonString)
         {
             Button b = new Button(s);
-            b.setAlignment(Pos.BOTTOM_CENTER);
+            b.setAlignment(Pos.CENTER);
             b.setOnMouseClicked(new EventHandler() {
                 @Override
                 public void handle(Event t) {
@@ -141,7 +192,6 @@ public class JournalGui extends Application {
             });
             popRoot.getChildren().add(b);
             popRoot.setAlignment(Pos.CENTER);
-		  VBox.setMargin(b, new Insets(15,5,15,5));
         }
         
         StackPane container = new StackPane();
@@ -168,7 +218,9 @@ public class JournalGui extends Application {
             public void handle(MouseEvent event) {
                 if(event.getClickCount() == 2) {
                     // need a method to show specified entry
-                    journal.getEntry(listview.getSelectionModel().getSelectedIndex() + 1);
+                    Entry chosenEntry = journal.getEntry(listview.getSelectionModel().getSelectedIndex() + 1);
+                    displayChosenJournalEntry(chosenEntry);
+                    entriesWindow.close();
                 }
             }
         });
@@ -187,8 +239,8 @@ public class JournalGui extends Application {
         entriesWindow.showAndWait();
     }
     
-    void displayChosenJournalEntry(int id) {
-        
+    void displayChosenJournalEntry(Entry chosenEntry) {
+        displayJournalEntry(chosenEntry);
     }
     
     /**
