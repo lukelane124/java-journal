@@ -92,6 +92,39 @@ public class JournalDatabase extends Database
         
         return null;
     }
+    
+    public Entry getLatestEntry()
+    {
+        ResultSet result = null;
+        PreparedStatement pstmnt = null;
+        String sqlString = "SELECT MAX(id) " + 
+                            "FROM entries ;" ;
+        
+        try
+        {
+            pstmnt = sqlConnection.prepareStatement(sqlString);
+            result = pstmnt.executeQuery();
+            int rId = result.getInt("id");
+            String rCdate = result.getString("entry_creation_date");
+            String rLUdate = result.getString("entry_last_update_date");
+            String rTitle = result.getString("entry_title");
+            String rContent = result.getString("entry_content");
+            return new Entry(rId, rCdate, rLUdate, rTitle, rContent);
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Unable to get Entry");
+            System.out.println(e.getMessage());
+        } finally{
+            try{
+                if(pstmnt != null) pstmnt.close();
+                if(result != null) result.close();
+                
+            } catch(Exception ex){}
+        }
+        
+        return null;
+    }
 
     ResultSet getTitles() {
 	   ResultSet ret = null;
@@ -113,5 +146,24 @@ public class JournalDatabase extends Database
 	   
 	   
 	   return (ret);
+    }
+//    public ResultSet sqlQueryWResults(String sqlString)
+    void appendEntry(Entry chosenEntry, String title, String entry) 
+    {
+        this.addEntry(title, entry);
+        Entry e = this.getLatestEntry();
+        int latestId = e.getId();
+        chosenEntry.addChild(latestId);
+        try (PreparedStatement pstnmt = sqlConnection.prepareStatement("UPDATE entries SET child=? WHERE id=?"))
+        {
+            pstnmt.setInt(1, latestId);
+            pstnmt.setInt(2, chosenEntry.getId());
+        }
+        catch (SQLException e2)
+        {
+            System.out.println("Unable to add Entry");
+            System.out.println(e2.getMessage());
+            e2.printStackTrace();
+        }
     }
 }

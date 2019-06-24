@@ -62,11 +62,13 @@ public class Journal
             {
                 System.out.println(rs.getString("entry_title"));
             }
+             rs.close();
         }
         catch (SQLException ex) 
         {
             ex.printStackTrace();
         }
+       
         
     }
 
@@ -79,6 +81,7 @@ public class Journal
                {
                    ret.add(rs.getString("entry_title"));
                }
+               rs.close();
            }
            catch (SQLException e)
            {
@@ -87,5 +90,10 @@ public class Journal
            }
           
 	   return ret;
+    }
+
+    void appendEntry(Entry chosenEntry, String title, String entry) 
+    {
+        db.appendEntry(chosenEntry, title, entry);
     }
 }

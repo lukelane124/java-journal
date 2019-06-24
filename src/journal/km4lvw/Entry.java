@@ -66,8 +66,10 @@ public class Entry
     private String lastEntryUpdateDate;
     private String entryTitle;
     private String entryContent;
+    private int child;
 
-    public Entry(int id, String entryCreationDate, String lastEntryUpdateDate, String entryTitle, String entryContent)
+    public Entry(int id, String entryCreationDate, String lastEntryUpdateDate, 
+                    String entryTitle, String entryContent)
     {
         this.id = id;
         this.entryCreationDate = entryCreationDate;
@@ -110,5 +112,10 @@ public class Entry
                 entryContent + " | " +
                 entryCreationDate + " | " +
                 lastEntryUpdateDate;
+    }
+
+    void addChild(int Id) 
+    {
+        this.child = Id;
     }
 }

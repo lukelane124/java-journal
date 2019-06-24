@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package journal.km4lvw;
 
 import java.awt.event.MouseAdapter;
@@ -103,13 +104,13 @@ public class JournalGui extends Application {
                 String entry = entryField.getText();
                 if ( !entry.equals("") && !title.equals(""))
                 {
-                    if(entry == null)
+                    if(chosenEntry == null)
                     {
                         journal.addEntry(title, entry);
                     }
                     else
                     {
-                        
+                        journal.appendEntry(chosenEntry, title, entry);
                     }
                     
                     titleField.clear();
