@@ -27,7 +27,7 @@ public class JournalDatabase extends Database
         String createTableSQL = "CREATE TABLE IF NOT EXISTS entries(\n" + 
                 "id INTEGER PRIMARY KEY, entry_creation_date TEXT NOT NULL, \n" + 
                 "entry_last_update_date TEXT NOT NULL, entry_title TEXT, \n" +
-                "entry_content TEXT, entry_data BLOB);";
+                "entry_content TEXT, child INTEGER KEY, entry_data BLOB);";
         executeSql(createTableSQL);
     }
     public static JournalDatabase getInstance()
@@ -98,13 +98,17 @@ public class JournalDatabase extends Database
         ResultSet result = null;
         PreparedStatement pstmnt = null;
         String sqlString = "SELECT MAX(id) " + 
-                            "FROM entries ;" ;
+                            "FROM entries" ;
         
         try
         {
             pstmnt = sqlConnection.prepareStatement(sqlString);
             result = pstmnt.executeQuery();
-            int rId = result.getInt("id");
+            int rId = result.getInt("MAX(id)");
+            result.close();
+            pstmnt.close();
+            pstmnt = sqlConnection.prepareStatement("select * from entries where id = " + rId);
+            result = pstmnt.executeQuery();
             String rCdate = result.getString("entry_creation_date");
             String rLUdate = result.getString("entry_last_update_date");
             String rTitle = result.getString("entry_title");
@@ -132,10 +136,7 @@ public class JournalDatabase extends Database
 	   try  
            {
                 Statement test = sqlConnection.createStatement();
-                PreparedStatement stmnt = sqlConnection.prepareStatement("SELECT * FROM entries;");
-                ret = test.executeQuery("SELECT * FROM entries;");
-		//ret = stmnt.executeQuery();
-		stmnt.close();
+                ret = test.executeQuery("SELECT * FROM entries WHERE child IS NULL;");
 	   } 
            catch (SQLException ex) 
            {
@@ -158,12 +159,13 @@ public class JournalDatabase extends Database
         {
             pstnmt.setInt(1, latestId);
             pstnmt.setInt(2, chosenEntry.getId());
+            pstnmt.execute();
         }
         catch (SQLException e2)
         {
             System.out.println("Unable to add Entry");
             System.out.println(e2.getMessage());
             e2.printStackTrace();
-        }
+        }       
     }
 }
