@@ -230,10 +230,7 @@ public class JournalGui extends Application {
         ObservableList<Entry> list = FXCollections.observableArrayList();
         AbstractList<Entry> entries = journal.getParentEntries();
         String [] colName = {"Title"};
-//        for (Entry e : entries)
-//        {
-//            listview.getItems().add(s);
-//        }
+
         if (entries != null)
         {
             listview.getItems().addAll(entries);

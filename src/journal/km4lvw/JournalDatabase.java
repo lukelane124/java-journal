@@ -150,7 +150,7 @@ public class JournalDatabase extends Database
             int rId = result.getInt("MAX(id)");
             result.close();
             pstmnt.close();
-            pstmnt = sqlConnection.prepareStatement("select * from entries where id = " + rId);
+            pstmnt = sqlConnection.prepareStatement("SELECT * FROM entries WHERE id = " + rId);
             result = pstmnt.executeQuery();
             String rCdate = result.getString("entry_creation_date");
             String rLUdate = result.getString("entry_last_update_date");
