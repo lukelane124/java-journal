@@ -219,19 +219,24 @@ public class JournalGui extends Application {
             public void handle(MouseEvent event) {
                 if(event.getClickCount() == 2) {
                     // need a method to show specified entry
-                    Entry chosenEntry = journal.getEntry(listview.getSelectionModel().getSelectedIndex() + 1);
+                    
+                    Entry chosenEntry = (Entry) listview.getSelectionModel().getSelectedItem();
                     displayChosenJournalEntry(chosenEntry);
                     entriesWindow.close();
                 }
             }
         });
         
-        ObservableList<String> list = FXCollections.observableArrayList();
-        AbstractList<String> titles = journal.getTitles();
+        ObservableList<Entry> list = FXCollections.observableArrayList();
+        AbstractList<Entry> entries = journal.getParentEntries();
         String [] colName = {"Title"};
-        for (String s : titles)
+//        for (Entry e : entries)
+//        {
+//            listview.getItems().add(s);
+//        }
+        if (entries != null)
         {
-            listview.getItems().add(s);
+            listview.getItems().addAll(entries);
         }
         Label l = new Label("Titles");
         entriesRoot.add(l, 0,0);

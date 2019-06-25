@@ -53,23 +53,46 @@ public class Journal
         return db.getEntry(id);
     }
     
-    void getEntries()
+    AbstractList<Entry> getEntries()
     {
-        ResultSet rs = db.sqlQueryWResults("select * from entries");
-        try 
-        {
-            while (rs.next())
-            {
-                System.out.println(rs.getString("entry_title"));
-            }
-             rs.close();
-        }
-        catch (SQLException ex) 
-        {
-            ex.printStackTrace();
-        }
-       
-        
+//        ArrayList<Entry> entries = new ArrayList<>();
+//        int counter = 1; //id's are 1 based in sqlite3.
+//
+//        Entry e = db.getEntry(counter++);
+//        while (e != null)
+//        {
+//            entries.add(e);
+//            System.out.println(e.getEntryTitle());
+//            e = db.getEntry(counter++);
+//        }
+//
+//        if (entries.size() <= 0)
+//        {
+//            entries = null;
+//        }
+//        return entries;
+        return db.getEntries();
+    }
+    
+    AbstractList<Entry> getParentEntries()
+    {
+//        ArrayList<Entry> entries = new ArrayList<>();
+//        int counter = 1; //id's are 1 based in sqlite3.
+//
+//        Entry e = db.getEntry(counter++);
+//        while (e != null)
+//        {
+//            entries.add(e);
+//            System.out.println(e.getEntryTitle());
+//            e = db.getEntry(counter++);
+//        }
+//
+//        if (entries.size() <= 0)
+//        {
+//            entries = null;
+//        }
+//        return entries;
+        return db.getParentEntries();
     }
 
     AbstractList<String> getTitles() {

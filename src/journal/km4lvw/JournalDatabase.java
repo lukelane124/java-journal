@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,6 +95,47 @@ public class JournalDatabase extends Database
         return null;
     }
     
+    AbstractList<Entry> getParentEntries()
+    {
+        ArrayList<Entry> ret = new ArrayList<>();
+        
+        ResultSet result = null;
+        PreparedStatement pstmnt = null;
+        String sqlString = "SELECT * " + 
+                            "FROM entries " + 
+                            "WHERE child IS NULL";
+        
+        try
+        {
+            pstmnt = sqlConnection.prepareStatement(sqlString);
+            
+            result = pstmnt.executeQuery();
+            while (result.next())
+            {
+                Entry e = new Entry(result.getInt("id"), result.getString("entry_creation_date"), result.getString("entry_last_update_date"), result.getString("entry_title"), result.getString("entry_content"));
+                ret.add(e);
+            }
+            
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Unable to get Entry");
+            System.out.println(e.getMessage());
+        } finally{
+            try{
+                if(pstmnt != null) pstmnt.close();
+                if(result != null) result.close();
+                
+            } catch(Exception ex){}
+        }
+        
+        if (ret.size() == 0)
+        {
+            ret = null;
+        }
+        return ret;
+    }
+    
     public Entry getLatestEntry()
     {
         ResultSet result = null;
@@ -167,5 +210,45 @@ public class JournalDatabase extends Database
             System.out.println(e2.getMessage());
             e2.printStackTrace();
         }       
+    }
+
+    AbstractList<Entry> getEntries() 
+    {
+        ArrayList<Entry> ret = new ArrayList<>();
+        
+        ResultSet result = null;
+        PreparedStatement pstmnt = null;
+        String sqlString = "SELECT * " + 
+                            "FROM entries";
+        
+        try
+        {
+            pstmnt = sqlConnection.prepareStatement(sqlString);
+            
+            result = pstmnt.executeQuery();
+            while (result.next())
+            {
+                Entry e = new Entry(result.getInt("id"), result.getString("entry_creation_date"), result.getString("entry_last_update_date"), result.getString("entry_title"), result.getString("entry_content"));
+                ret.add(e);
+            }
+            
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Unable to get Entry");
+            System.out.println(e.getMessage());
+        } finally{
+            try{
+                if(pstmnt != null) pstmnt.close();
+                if(result != null) result.close();
+                
+            } catch(Exception ex){}
+        }
+        
+        if (ret.size() == 0)
+        {
+            ret = null;
+        }
+        return ret;
     }
 }

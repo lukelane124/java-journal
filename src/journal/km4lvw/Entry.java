@@ -106,12 +106,13 @@ public class Entry
     @Override
     public String toString()
     {
-        return "Entry: " + 
-                id + " | " +
-                entryTitle + " | " +
-                entryContent + " | " +
-                entryCreationDate + " | " +
-                lastEntryUpdateDate;
+//        return "Entry: " + 
+//                id + " | " +
+//                entryTitle + " | " +
+//                entryContent + " | " +
+//                entryCreationDate + " | " +
+//                lastEntryUpdateDate;
+        return entryTitle;
     }
 
     void addChild(int Id) 
