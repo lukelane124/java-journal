@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 public class JournalDatabase extends Database 
 {
     private static final String DATABASE_FILE = "jrnl.sqlite";
+    //private static final String DATABASE_FILE = "test3.db";
     protected static JournalDatabase localInstance;
     private JournalDatabase()
     {
@@ -271,13 +272,46 @@ public class JournalDatabase extends Database
         }
         else
         {
-            ResultSet rs = null;
+            int currentId = entryId;
             do
             {
-                try (PreparedStatement pstnmt = sqlConnection.prepareStatement("SELECT id FROM entries WHERE id=?"))
+                ResultSet rs = null;
+//                try (PreparedStatement pstnmt = sqlConnection.prepareStatement("SELECT id FROM entries WHERE id=?"))
+                try
                 {
-                    pstnmt.setInt(1, entryId);
-                    pstnmt.executeQuery();
+//                    pstnmt.setInt(1, entryId);
+//                    rs = pstnmt.executeQuery();
+                    
+                    
+                    if (entryId != 0) 
+                    {
+                       //PreparedStatement pstmnt = sqlConnection.prepareStatement("DELETE FROM entries WHERE id=?");
+                       PreparedStatement pstmnt = sqlConnection.prepareStatement("SELECT id FROM entries WHERE child=?");
+                       pstmnt.setInt(1, entryId);
+                       rs = pstmnt.executeQuery(); 
+                       int tempId;
+                       if (rs.next())
+                       {
+                           tempId = rs.getInt("id");
+                           
+                       }
+                       else
+                       {
+                           tempId = 0;
+                       }
+                       rs.close();
+                       pstmnt.close();
+                       pstmnt = sqlConnection.prepareStatement("DELETE FROM entries WHERE id=?");
+                       pstmnt.setInt(1, entryId);
+                       pstmnt.execute();
+                       pstmnt.close();
+                       entryId = tempId;
+                        
+                    } 
+                    else
+                    {
+                        break;
+                    }
                 }
                 catch (SQLException e2)
                 {
@@ -285,19 +319,7 @@ public class JournalDatabase extends Database
                     System.out.println(e2.getMessage());
                     e2.printStackTrace();
                 }
-                int currentId = 0;
-                try {
-                    while(rs.next()) 
-                    {
-                       currentId = rs.getInt("id");
-                       rs.close();
-                       PreparedStatement pstmnt = sqlConnection.prepareStatement("DELETE FROM entries WHERE id=?");
-                       pstmnt.setInt(1, entryId);
-                       pstmnt.execute();
-                    }
-                } catch (SQLException ex) {                    
-                    Logger.getLogger(JournalDatabase.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
             }while (true);
         }
         
