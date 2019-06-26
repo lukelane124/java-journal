@@ -92,41 +92,54 @@ public class JournalGui extends Application {
         entrySubmit.setText("Complete Entry");
         entrySubmit.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent event) 
+        @Override
+        public void handle(ActionEvent event) 
+        {
+            String title = titleField.getText();
+            String entry = entryField.getText();
+            if ( !entry.equals("") && !title.equals(""))
             {
-                String title = titleField.getText();
-                String entry = entryField.getText();
-                if ( !entry.equals("") && !title.equals(""))
+                if(chosenEntry == null)
                 {
-                    if(chosenEntry == null)
-                    {
-                        journal.addEntry(title, entry);
-                    }
-                    else
-                    {
-                        journal.appendEntry(chosenEntry, title, entry);
-                    }
-                    
-                    titleField.clear();
-                    entryField.clear();
-                    titleField.promptTextProperty().set(titlePrompt);
+                    journal.addEntry(title, entry);
                 }
                 else
                 {
-                    getResult("Please enter a non-empty title and entry", "Okay");
+                    journal.appendEntry(chosenEntry, title, entry);
                 }
+
+                titleField.clear();
+                entryField.clear();
+                titleField.promptTextProperty().set(titlePrompt);
             }
-       });
-       gridPane.add(entrySubmit, 6, 0);
-	  Button listEntries = new Button("List Entries");
-	  listEntries.setOnAction(new EventHandler<ActionEvent>() {
-		  @Override
-		  public void handle(ActionEvent event) {
-			showEntries();
-		  }
-	   });
-	  gridPane.add(listEntries, 7, 0);
+            else
+            {
+                getResult("Please enter a non-empty title and entry", "Okay");
+            }
+        }
+        });
+        gridPane.add(entrySubmit, 6, 0);
+        
+        
+        Button listEntries = new Button("List Entries");
+        listEntries.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                showEntries();
+            }
+        });
+        gridPane.add(listEntries, 7, 0);
+        if (chosenEntry != null)
+        {
+            Button deleteEntry = new Button("Delete Entry");
+            deleteEntry.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    chosenEntry.deleteEntry();
+                }
+            });
+            gridPane.add(deleteEntry, 8, 0);
+        }
 
        StackPane root = new StackPane();
        //root.getChildren().add(entrySubmit);
@@ -164,9 +177,8 @@ public class JournalGui extends Application {
         mainStage.setHeight((double) number2);
     }
     
-    private String getResult(String prompt, String ... buttonString)
+    private void getResult(String prompt, String ... buttonString)
     {
-        String RetString = "";
         Stage window = new Stage(StageStyle.UTILITY);
         window.setTitle("Invalid Input");
         
@@ -183,7 +195,7 @@ public class JournalGui extends Application {
             b.setOnMouseClicked(new EventHandler() {
                 @Override
                 public void handle(Event t) {
-                    RetString = b.getText();
+                    passingString = b.getText();
                     window.close();
                 }
             });
@@ -201,7 +213,6 @@ public class JournalGui extends Application {
         
         window.setScene(popScene);
         window.showAndWait();
-        return RetString;
     }
     
     void showEntries()
@@ -214,9 +225,7 @@ public class JournalGui extends Application {
         listview.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if(event.getClickCount() == 2) {
-                    // need a method to show specified entry
-                    
+                if(event.getClickCount() == 2) {                    
                     Entry chosenEntry = (Entry) listview.getSelectionModel().getSelectedItem();
                     displayChosenJournalEntry(chosenEntry);
                     entriesWindow.close();
@@ -238,6 +247,7 @@ public class JournalGui extends Application {
         entriesWindow.setScene(entriesScene);
         entriesWindow.showAndWait();
     }
+    
     
     void displayChosenJournalEntry(Entry chosenEntry) {
         displayJournalEntry(chosenEntry);

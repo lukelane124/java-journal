@@ -87,4 +87,8 @@ public class Journal
     {
         db.appendEntry(chosenEntry, title, entry);
     }
+
+    void deleteEntry(int Id, boolean b) {
+        db.deleteEntry(Id, b);
+    }
 }

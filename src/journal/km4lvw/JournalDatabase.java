@@ -251,4 +251,55 @@ public class JournalDatabase extends Database
         }
         return ret;
     }
+    
+    void deleteEntry(int entryId, boolean deleteReal)
+    {
+        if (deleteReal == false)
+        {
+            try (PreparedStatement pstnmt = sqlConnection.prepareStatement("UPDATE entries SET child=? WHERE id=?"))
+            {
+                pstnmt.setInt(1, -1);
+                pstnmt.setInt(2, entryId);
+                pstnmt.execute();
+            }
+            catch (SQLException e2)
+            {
+                System.out.println("Unable to add Entry");
+                System.out.println(e2.getMessage());
+                e2.printStackTrace();
+            }
+        }
+        else
+        {
+            ResultSet rs = null;
+            do
+            {
+                try (PreparedStatement pstnmt = sqlConnection.prepareStatement("SELECT id FROM entries WHERE id=?"))
+                {
+                    pstnmt.setInt(1, entryId);
+                    pstnmt.executeQuery();
+                }
+                catch (SQLException e2)
+                {
+                    System.out.println("Unable to delete Entry");
+                    System.out.println(e2.getMessage());
+                    e2.printStackTrace();
+                }
+                int currentId = 0;
+                try {
+                    while(rs.next()) 
+                    {
+                       currentId = rs.getInt("id");
+                       rs.close();
+                       PreparedStatement pstmnt = sqlConnection.prepareStatement("DELETE FROM entries WHERE id=?");
+                       pstmnt.setInt(1, entryId);
+                       pstmnt.execute();
+                    }
+                } catch (SQLException ex) {                    
+                    Logger.getLogger(JournalDatabase.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }while (true);
+        }
+        
+    }
 }

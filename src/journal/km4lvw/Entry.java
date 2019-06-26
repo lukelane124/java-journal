@@ -119,4 +119,10 @@ public class Entry
     {
         this.child = Id;
     }
+    
+    void deleteEntry()
+    {
+        Journal journal = Journal.getInstance();
+        journal.deleteEntry(this.id, false);
+    }
 }
