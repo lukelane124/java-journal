@@ -72,8 +72,9 @@ public class JournalGui extends Application {
     
     void displayJournalEntry(Entry chosenEntry)
     {
-        mainStage.setTitle("Journal 0.0.0");
+        mainStage.setTitle("JLite 0.0.0");
         GridPane gridPane = new GridPane();
+
         TextField titleField;
         if(chosenEntry == null)
         {
@@ -82,6 +83,7 @@ public class JournalGui extends Application {
         else
         {
             titleField = new TextField(chosenEntry.getEntryTitle());
+            
         }
         
         titleField.setPrefWidth(1000000);
@@ -91,7 +93,11 @@ public class JournalGui extends Application {
         {
             entryField.setText(chosenEntry.getEntryContent());
         }
-        gridPane.add(entryField, 1, 5, 20, 20);
+        
+        //ntryField.prefHeightProperty().bind(gridPane.prefHeightProperty());
+        entryField.setPrefSize( Double.MAX_VALUE, Double.MAX_VALUE );
+        entryField.setWrapText(true);
+        gridPane.add(entryField, 1, 5, 25, 25);
 
         Button entrySubmit = new Button();
         entrySubmit.setText("Complete Entry");
