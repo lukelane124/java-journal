@@ -136,6 +136,7 @@ public class JournalGui extends Application {
                 @Override
                 public void handle(ActionEvent event) {
                     chosenEntry.deleteEntry();
+                    displayChosenJournalEntry(null);
                 }
             });
             gridPane.add(deleteEntry, 8, 0);
