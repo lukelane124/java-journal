@@ -48,26 +48,19 @@ public class Journal
         db.addEntry(title, entry);
     }
     
-    void getEntry(int id)
+    Entry getEntry(int id)
     {
-        db.displayEntry(id);
+        return db.getEntry(id);
     }
     
-    void getEntries()
+    AbstractList<Entry> getEntries()
     {
-        ResultSet rs = db.sqlQueryWResults("select * from entries");
-        try 
-        {
-            while (rs.next())
-            {
-                System.out.println(rs.getString("entry_title"));
-            }
-        }
-        catch (SQLException ex) 
-        {
-            ex.printStackTrace();
-        }
-        
+        return db.getEntries();
+    }
+    
+    AbstractList<Entry> getParentEntries()
+    {
+        return db.getParentEntries();
     }
 
     AbstractList<String> getTitles() {
@@ -79,6 +72,7 @@ public class Journal
                {
                    ret.add(rs.getString("entry_title"));
                }
+               rs.close();
            }
            catch (SQLException e)
            {
@@ -87,5 +81,10 @@ public class Journal
            }
           
 	   return ret;
+    }
+
+    void appendEntry(Entry chosenEntry, String title, String entry) 
+    {
+        db.appendEntry(chosenEntry, title, entry);
     }
 }
