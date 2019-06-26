@@ -108,9 +108,7 @@ public class JournalGui extends Application {
                     journal.appendEntry(chosenEntry, title, entry);
                 }
 
-                titleField.clear();
-                entryField.clear();
-                titleField.promptTextProperty().set(titlePrompt);
+                displayJournalEntry(null);
             }
             else
             {
