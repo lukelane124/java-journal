@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -66,8 +67,8 @@ public class Database {
 
     public ResultSet sqlQueryWResults(String sqlString) {
 	   ResultSet ret = null;
-	   try (Statement stmnt1 = sqlConnection.createStatement()) {
-		  ret = stmnt1.executeQuery(sqlString);
+	   try (PreparedStatement stmnt1 = sqlConnection.prepareStatement(sqlString)) {
+		  ret = stmnt1.executeQuery();
 	   } catch (SQLException e) {
 		  System.out.println("Unable to query database.");
 		  System.out.println(e.getMessage());

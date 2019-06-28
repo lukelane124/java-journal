@@ -139,6 +139,39 @@ public class JournalGui extends Application {
             });
             gridPane.add(deleteEntry, 8, 0);
         }
+        
+        if (chosenEntry != null)
+        {
+            Button newEntry = new Button("New Entry");
+            newEntry.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    getResult("Would you like to save the current Entry?", "Yes", "No", "Cancel");
+                    String title = titleField.getText();
+                    String entry = entryField.getText();
+                    switch (passingString)
+                    {
+                        case "Cancel":
+                            break;
+                        case "Yes":
+                            if ( !entry.equals("") && !title.equals(""))
+                            {                                
+                                journal.appendEntry(chosenEntry, title, entry);
+                                displayJournalEntry(null);
+                            }
+                            else
+                            {
+                                getResult("Please enter a non-empty title and entry", "Okay");
+                            }
+                        
+                        default:
+                            displayChosenJournalEntry(null);
+                    }
+                    
+                }
+            });
+            gridPane.add(newEntry, 9, 0);
+        }
 
        StackPane root = new StackPane();
        //root.getChildren().add(entrySubmit);

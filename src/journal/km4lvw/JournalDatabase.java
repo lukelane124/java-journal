@@ -27,11 +27,25 @@ public class JournalDatabase extends Database
     private JournalDatabase()
     {
         super(DATABASE_FILE);
+        String queryUser_version = "PRAGMA user_version";
         String createTableSQL = "CREATE TABLE IF NOT EXISTS entries(\n" + 
                 "id INTEGER PRIMARY KEY, entry_creation_date TEXT NOT NULL, \n" + 
                 "entry_last_update_date TEXT NOT NULL, entry_title TEXT, \n" +
                 "entry_content TEXT, child INTEGER KEY, entry_data BLOB);";
         executeSql(createTableSQL);
+//        try (PreparedStatement pstmnt = sqlConnection.prepareStatement(queryUser_version))
+//        {
+//            ResultSet rs = pstmnt.executeQuery();
+//            String user_version = rs.getString("user_version");
+//            
+//            System.out.println("the entry was added successfully to the database.");
+//        }
+//        catch (SQLException e)
+//        {
+//            System.out.println("Unable to add Entry");
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
     }
     public static JournalDatabase getInstance()
     {
