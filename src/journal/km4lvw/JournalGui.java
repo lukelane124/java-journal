@@ -195,7 +195,8 @@ public class JournalGui extends Application {
                 {
                     try {
                         byte[] fileBytes = Files.readAllBytes(chosenFile.toPath());
-                        journal.addBlob(chosenEntry.getId(), fileBytes);
+                        chosenEntry.addBlob(fileBytes);
+                        displayChosenJournalEntry(chosenEntry);
                     } catch (IOException ex) {
                         Logger.getLogger(JournalGui.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -204,6 +205,18 @@ public class JournalGui extends Application {
         });
         gridPane.add(addFile, 10, 0);
         
+        if (chosenEntry != null && chosenEntry.hasBlob())
+        {
+            Button deleteFile = new Button("Delete File");
+            deleteFile.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    chosenEntry.deleteBlob(false);
+                    displayChosenJournalEntry(null);
+                }
+            });
+            gridPane.add(deleteFile, 11, 0);
+        }
 
        StackPane root = new StackPane();
        //root.getChildren().add(entrySubmit);

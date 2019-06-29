@@ -96,4 +96,20 @@ public class Journal
     {
         db.addBlob(entryId, bytes);
     }
+    
+    byte[] getBlob(int entryId)
+    {
+        return db.getBlob(entryId);
+    }
+    
+    
+    void deleteBlob(int entryId, boolean realDelete)
+    {
+        db.deleteBlob(entryId, realDelete);
+    }
+    
+    boolean hasBlob(int entryId)
+    {
+        return db.hasBlob(entryId);
+    }
 }

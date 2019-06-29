@@ -276,6 +276,7 @@ public class JournalDatabase extends Database
                 pstnmt.setInt(1, -1);
                 pstnmt.setInt(2, entryId);
                 pstnmt.execute();
+                pstnmt.close();
             }
             catch (SQLException e2)
             {
@@ -326,6 +327,7 @@ public class JournalDatabase extends Database
                     {
                         break;
                     }
+                    
                 }
                 catch (SQLException e2)
                 {
@@ -348,6 +350,7 @@ public class JournalDatabase extends Database
             pstmnt.setInt(2, entryId);
             pstmnt.setBytes(1, bytes);
             pstmnt.execute(); 
+            pstmnt.close();
             
         }
         catch (SQLException ex)
@@ -356,5 +359,109 @@ public class JournalDatabase extends Database
             System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
+    }
+    
+    byte[] getBlob(int entryId)
+    {
+        ResultSet rs = null;
+        byte[] ret = null;
+        try
+        {
+            
+            PreparedStatement pstmnt = sqlConnection.prepareStatement(
+                    "SELECT entry_data FROM entries WHERE id=?");
+            pstmnt.setInt(1, entryId);
+            rs = pstmnt.executeQuery();
+            if (rs.next())
+            {
+                ret = rs.getBytes("entry_data");
+            }
+            rs.close();
+            pstmnt.close();
+        }
+        catch (SQLException ex)
+        {
+             System.out.println("Unable to add file to Entry");
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return ret;
+    }
+    
+    void deleteBlob(int entryId, boolean realDelete)
+    {
+        if (realDelete)
+        {
+            try
+            {
+
+                PreparedStatement pstmnt = sqlConnection.prepareStatement(
+                        "UPDATE entries SET entry_data=NULL WHERE id=?");
+                pstmnt.setInt(1, entryId);
+                pstmnt.execute();
+                pstmnt.close();
+            }
+            catch (SQLException ex)
+            {
+                System.out.println("Unable to remove file from Entry");
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+        else
+        {
+            try
+            {
+                ResultSet rs = null;
+                PreparedStatement pstmnt = sqlConnection.prepareStatement(
+                        "SELECT * FROM entries WHERE id=?");
+                pstmnt.setInt(1, entryId);
+                rs = pstmnt.executeQuery();
+                if (rs.next())
+                {
+                    String title = rs.getString("entry_title");
+                    String entry = rs.getString("entry_content");
+                    this.appendEntry(getEntry(entryId), title, entry);
+                }
+                pstmnt.close();
+            }
+            catch (SQLException ex)
+            {
+                System.out.println("Unable to remove file from Entry");
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+            }
+            
+        }
+    }
+    
+    boolean hasBlob(int entryId)
+    {
+        boolean ret = false;
+        try
+            {
+                ResultSet rs = null;
+                PreparedStatement pstmnt = sqlConnection.prepareStatement(
+                        "SELECT entry_data FROM entries WHERE id=?");
+                pstmnt.setInt(1, entryId);
+                rs = pstmnt.executeQuery();
+                if (rs.next())
+                {
+                    byte[] blob = rs.getBytes("entry_data");
+                    if (blob != null)
+                    {
+                        ret = true;
+                    }
+                    
+                }
+                pstmnt.close();
+            }
+            catch (SQLException ex)
+            {
+                System.out.println("Unable to remove file from Entry");
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+            }
+        return ret;
     }
 }

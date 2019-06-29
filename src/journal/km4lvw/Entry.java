@@ -67,6 +67,7 @@ public class Entry
     private String entryTitle;
     private String entryContent;
     private int child;
+    boolean LhasBlob;
 
     public Entry(int id, String entryCreationDate, String lastEntryUpdateDate, 
                     String entryTitle, String entryContent)
@@ -76,6 +77,8 @@ public class Entry
         this.lastEntryUpdateDate = lastEntryUpdateDate;
         this.entryTitle = entryTitle;
         this.entryContent = entryContent;
+        child = 0;
+        LhasBlob = false;
     }
 
     public int getId()
@@ -124,5 +127,32 @@ public class Entry
     {
         Journal journal = Journal.getInstance();
         journal.deleteEntry(this.id, false);
+    }
+    
+    void addBlob(byte[] bytes)
+    {
+        Journal journal = Journal.getInstance();
+        journal.addBlob(this.id, bytes);
+        this.LhasBlob = true;
+    }
+    
+    byte[] getBlob()
+    {
+        Journal journal = Journal.getInstance();
+        return journal.getBlob(this.id);
+    }
+    
+    void deleteBlob(boolean realDelete)
+    {
+        Journal journal = Journal.getInstance();
+        journal.deleteBlob(this.id, realDelete);
+        LhasBlob = false;
+    }
+    
+    public boolean hasBlob()
+    {
+        //return this.LhasBlob;
+        Journal journal = Journal.getInstance();
+        return journal.hasBlob(this.id);
     }
 }
