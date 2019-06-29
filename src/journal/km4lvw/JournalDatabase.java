@@ -21,9 +21,11 @@ import java.util.logging.Logger;
  */
 public class JournalDatabase extends Database 
 {
-    private static final String DATABASE_FILE = "jrnl.sqlite";
+    private static final String DATABASE_FILE = "jrnlTEST.sqlite";
     //private static final String DATABASE_FILE = "test3.db";
     protected static JournalDatabase localInstance;
+    protected final String CURRENT_VERSION = "-1";
+    String currentUserVersion = null;
     private JournalDatabase()
     {
         super(DATABASE_FILE);
@@ -32,7 +34,30 @@ public class JournalDatabase extends Database
                 "id INTEGER PRIMARY KEY, entry_creation_date TEXT NOT NULL, \n" + 
                 "entry_last_update_date TEXT NOT NULL, entry_title TEXT, \n" +
                 "entry_content TEXT, child INTEGER KEY, entry_data BLOB);";
-        executeSql(createTableSQL);
+
+        ResultSet result = sqlQueryWResults(queryUser_version);
+	   try
+	   {
+		if (result.next())
+		{
+			currentUserVersion = result.getString("user_version");
+		}  
+	   }
+	   catch (SQLException e)
+	   {
+		  System.out.println("Unable to get user_version");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+	   }
+	   
+	    executeSql(createTableSQL);
+	   
+//	   switch(currentUserVersion)
+//	   {
+//		   case "-1"
+//	   }
+	   
+	   
 //        try (PreparedStatement pstmnt = sqlConnection.prepareStatement(queryUser_version))
 //        {
 //            ResultSet rs = pstmnt.executeQuery();

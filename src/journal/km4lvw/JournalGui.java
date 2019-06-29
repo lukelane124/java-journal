@@ -48,7 +48,7 @@ import sun.security.action.OpenFileInputStreamAction;
 public class JournalGui extends Application {
     private static final String titlePrompt = "Title";
     private final Journal journal = Journal.getInstance();
-    private Scene MainJournalScene, PopupScene;
+    private Scene MainJournalScene;
     private Stage mainStage;
     
     private String passingString;
@@ -70,13 +70,14 @@ public class JournalGui extends Application {
     
     void displayJournalEntry(Entry chosenEntry)
     {
-        mainStage.setTitle("JLite 0.0.0");
+        mainStage.setTitle("JLite 0.1.0");
         GridPane gridPane = new GridPane();
 
         TextField titleField;
         if(chosenEntry == null)
         {
-            titleField = new TextField(titlePrompt);
+            titleField = new TextField();
+		  titleField.setPromptText(titlePrompt);
         }
         else
         {
@@ -187,20 +188,29 @@ public class JournalGui extends Application {
         addFile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Open Resource File");
-                File chosenFile = fileChooser.showOpenDialog(mainStage);
-                if (chosenEntry != null)
-                {
-                    try {
-                        byte[] fileBytes = Files.readAllBytes(chosenFile.toPath());
-                        chosenEntry.addBlob(fileBytes);
-                        displayChosenJournalEntry(chosenEntry);
-                    } catch (IOException ex) {
-                        Logger.getLogger(JournalGui.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+               Entry localEntry = null;
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Resource File");
+			File chosenFile = fileChooser.showOpenDialog(mainStage);
+			if (chosenEntry == null)
+			{
+				journal.addEntry(titleField.getText(), entryField.getText());
+				localEntry = journal.getLatestEntry();
+			}
+			else
+			{
+				localEntry = chosenEntry;
+			}
+			{
+			    try {
+				   byte[] fileBytes = Files.readAllBytes(chosenFile.toPath());
+				   localEntry.addBlob(fileBytes);
+				   displayChosenJournalEntry(localEntry);
+			    } catch (IOException ex) {
+				   Logger.getLogger(JournalGui.class.getName()).log(Level.SEVERE, null, ex);
+			    }
+			}
+			
             }
         });
         gridPane.add(addFile, 10, 0);

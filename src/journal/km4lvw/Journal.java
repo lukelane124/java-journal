@@ -112,4 +112,9 @@ public class Journal
     {
         return db.hasBlob(entryId);
     }
+    
+    Entry getLatestEntry()
+    {
+	    return db.getLatestEntry();
+    }
 }
