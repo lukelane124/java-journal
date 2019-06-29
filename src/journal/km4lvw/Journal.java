@@ -91,4 +91,9 @@ public class Journal
     void deleteEntry(int Id, boolean b) {
         db.deleteEntry(Id, b);
     }
+    
+    void addBlob(int entryId, byte[] bytes)
+    {
+        db.addBlob(entryId, bytes);
+    }
 }

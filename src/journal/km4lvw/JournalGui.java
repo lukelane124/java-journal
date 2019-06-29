@@ -6,7 +6,14 @@
 
 package journal.km4lvw;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.AbstractList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,7 +36,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.StageStyle;
+import sun.security.action.OpenFileInputStreamAction;
 
 /**
  *
@@ -172,6 +181,29 @@ public class JournalGui extends Application {
             });
             gridPane.add(newEntry, 9, 0);
         }
+        
+        
+        Button addFile = new Button("Add File");
+        addFile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Open Resource File");
+                File chosenFile = fileChooser.showOpenDialog(mainStage);
+                if (chosenEntry != null)
+                {
+                    try {
+                        byte[] fileBytes = Files.readAllBytes(chosenFile.toPath());
+                        journal.addBlob(chosenEntry.getId(), fileBytes);
+                    } catch (IOException ex) {
+                        Logger.getLogger(JournalGui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        gridPane.add(addFile, 10, 0);
+        
 
        StackPane root = new StackPane();
        //root.getChildren().add(entrySubmit);

@@ -338,4 +338,23 @@ public class JournalDatabase extends Database
         }
         
     }
+    
+    void addBlob(int entryId, byte[] bytes)
+    {
+        try
+        {
+            PreparedStatement pstmnt = sqlConnection.prepareStatement(
+                    "UPDATE entries  set entry_data=?  WHERE id=?");
+            pstmnt.setInt(2, entryId);
+            pstmnt.setBytes(1, bytes);
+            pstmnt.execute(); 
+            
+        }
+        catch (SQLException ex)
+        {
+             System.out.println("Unable to add file to Entry");
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
 }
